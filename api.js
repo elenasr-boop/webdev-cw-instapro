@@ -2,6 +2,7 @@
 // "боевая" версия инстапро лежит в ключе prod
 import { renderUserPostsPage } from "./components/user-posts-page.js";
 import { getToken, goToPage } from "./index.js";
+import { AUTH_PAGE, POSTS_PAGE } from "./routes.js";
 
 const personalKey = "prod";
 const baseHost = "https://webdev-hw-api.vercel.app";
@@ -123,10 +124,30 @@ export function getUserPosts ({ id }) {
           imageUrl: post.user.imageUrl
         },
         likes: post.likes.length,
-        isLiked: false
+        isLiked: post.isLiked
       }
     });
     
     renderUserPostsPage({appEl: document.getElementById("app"), userPosts});
+  })
+}
+
+export function likeApi ({ id, isLiked }) {
+  let lik = '';
+  isLiked ? lik = 'dislike' : lik ='like';
+  return fetch('https://wedev-api.sky.pro/api/v1/prod/instapro/'+`${id}/${lik}`, {
+  method: "POST", 
+  headers: {
+    Authorization: getToken(),
+  },
+  }).then((res) => {
+    if (res.status === 401) {
+      alert('Необходимо авторизоваться');
+      goToPage(AUTH_PAGE);
+      throw new Error(res.statusText);
+    }
+    return res.json();
+  }).then((resData) => {
+    return resData;
   })
 }

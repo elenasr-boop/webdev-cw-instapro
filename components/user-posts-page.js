@@ -1,4 +1,6 @@
 import { renderHeaderComponent } from "./header-component.js";
+import { like } from "../helpers.js";
+import { formatDistanceToNow } from "date-fns";
 
 export function renderUserPostsPage ({ appEl, userPosts }) {
     let userPostsHtml = userPosts.map((post) => {
@@ -10,12 +12,12 @@ export function renderUserPostsPage ({ appEl, userPosts }) {
             <button class="like-button" data-post-id="${post.id}">
                 <img src="${post.isLiked ? '../assets/images/like-active.svg': '../assets/images/like-not-active.svg'}">
             </button>
-            <p class="post-likes-text">Нравится: <strong>${post.likes}</strong></p>
+            <p class="post-likes-text">Нравится: <strong class="number-of-likes">${post.likes}</strong></p>
         </div>
         <p class="post-text">
             <span class="user-name">${post.user.name}<span> ${post.description}
         </p>
-        <p class="post-date">${post.createdAt}</p>
+        <p class="post-date">${formatDistanceToNow(post.createdAt)} ago</p>
         </li>`
     });
 
@@ -30,4 +32,11 @@ export function renderUserPostsPage ({ appEl, userPosts }) {
     renderHeaderComponent({
         element: document.querySelector(".header-container"),
       });
+
+    let likeButtons = document.querySelectorAll('.like-button');
+    for (let likeButton of likeButtons) {
+        likeButton.addEventListener('click', () => {
+            like( {button: likeButton});
+          });
+    }
 }

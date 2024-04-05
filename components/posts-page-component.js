@@ -1,6 +1,8 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
+import { like } from "../helpers.js";
+import { formatDistanceToNow } from "date-fns";
 
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
@@ -23,12 +25,12 @@ export function renderPostsPageComponent({ appEl }) {
         <button class="like-button" data-post-id="${post.id}">
           <img src="${post.isLiked ? '../assets/images/like-active.svg' : "../assets/images/like-not-active.svg"}">
         </button>
-        <p class="post-likes-text"> Нравится: <strong>${post.likes.length}</strong></p>
+        <p class="post-likes-text"> Нравится: <strong class="number-of-likes">${post.likes.length}</strong></p>
       </div>
       <p class="post-text">
         <span class="user-name">${post.user.name}</span> ${post.description}
       </p>
-      <p class="post-date">${post.createdAt}</p>
+      <p class="post-date">${formatDistanceToNow(post.createdAt)} ago</p>
     </li>
     `}).join("");
 
@@ -45,4 +47,11 @@ export function renderPostsPageComponent({ appEl }) {
       });
     });
   }
+
+  let likeButtons = document.querySelectorAll('.like-button');
+    for (let likeButton of likeButtons) {
+        likeButton.addEventListener('click', () => {
+          like( {button: likeButton});
+        });
+    }
 }
