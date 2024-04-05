@@ -1,5 +1,9 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
+import { renderUserPostsPage } from "./components/user-posts-page.js";
+import { getToken, goToPage } from "./index.js";
+import { AUTH_PAGE, POSTS_PAGE } from "./routes.js";
+
 const personalKey = "prod";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
@@ -57,7 +61,7 @@ export function loginUser({ login, password }) {
 }
 
 // Загружает картинку в облако, возвращает url загруженной картинки
-export function uploadImage({ file }) {
+export function uploadImage({ file, description }) {
   const data = new FormData();
   data.append("file", file);
 
@@ -66,5 +70,84 @@ export function uploadImage({ file }) {
     body: data,
   }).then((response) => {
     return response.json();
+  }).then((data) =>{
+     postUpload({ description: description, imageUrl: data.fileUrl, token: getToken()})
   });
+}
+
+export function postUpload({ description, imageUrl, token }) {
+  return fetch( 'https://wedev-api.sky.pro/api/v1/prod/instapro/', {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify ({
+      description: description,
+      imageUrl: imageUrl
+    })
+  }).then((res) => {
+    console.log('загрузка успешна', imageUrl);
+    if (res.status === 400) {
+      if (description.replace(/\s+/g, '') ==='') {
+        alert('Описание не должно быть пустым');
+      } else {
+        alert('Не удалось загрузить картинку');
+      }  
+
+      throw new Error(res.statusText);
+    }
+    if (res.status === 201) goToPage(POSTS_PAGE);
+   }).catch((e) => {
+    console.log(e);
+   })
+}
+
+export function getUserPosts ({ id }) {
+  return fetch(`https://wedev-api.sky.pro/api/v1/prod/instapro/user-posts/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: getToken()
+    }
+  }).then((res) => {
+    return res.json();
+  }).then((resData) => {
+    let userPosts = resData.posts.map((post) => {
+      return {
+        id: post.id,
+        imageUrl: post.imageUrl,
+        createdAt: post.createdAt,
+        description: post.description,
+        user: {
+          id: post.user.id,
+          name: post.user.name,
+          login: post.user.login,
+          imageUrl: post.user.imageUrl
+        },
+        likes: post.likes.length,
+        isLiked: post.isLiked
+      }
+    });
+    
+    renderUserPostsPage({appEl: document.getElementById("app"), userPosts});
+  })
+}
+
+export function likeApi ({ id, isLiked }) {
+  let lik = '';
+  isLiked ? lik = 'dislike' : lik ='like';
+  return fetch('https://wedev-api.sky.pro/api/v1/prod/instapro/'+`${id}/${lik}`, {
+  method: "POST", 
+  headers: {
+    Authorization: getToken(),
+  },
+  }).then((res) => {
+    if (res.status === 401) {
+      alert('Необходимо авторизоваться');
+      goToPage(AUTH_PAGE);
+      throw new Error(res.statusText);
+    }
+    return res.json();
+  }).then((resData) => {
+    return resData;
+  })
 }
