@@ -68,3 +68,18 @@ export function uploadImage({ file }) {
     return response.json();
   });
 }
+
+// export function getPosts ({ token }) {
+//   return fetch(baseHost + '/', {
+//     method: "GET", 
+//     headers: {
+//       Authorization: token,
+//     }
+//   }).then((res) => {
+//     if (res.status === 500) {
+//       alert("Ошибка сервера, попробуйте позже");
+//       throw new Error(res.statusText);
+//     }
+//     return res.json();
+//   })
+// }
