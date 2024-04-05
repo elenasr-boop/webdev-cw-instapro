@@ -1,5 +1,6 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
+import { renderUserPostsPage } from "./components/user-posts-page.js";
 import { getToken, goToPage } from "./index.js";
 
 const personalKey = "prod";
@@ -98,4 +99,34 @@ export function postUpload({ description, imageUrl, token }) {
    }).catch((e) => {
     console.log(e);
    })
+}
+
+export function getUserPosts ({ id }) {
+  return fetch(`https://wedev-api.sky.pro/api/v1/prod/instapro/user-posts/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: getToken()
+    }
+  }).then((res) => {
+    return res.json();
+  }).then((resData) => {
+    let userPosts = resData.posts.map((post) => {
+      return {
+        id: post.id,
+        imageUrl: post.imageUrl,
+        createdAt: post.createdAt,
+        description: post.description,
+        user: {
+          id: post.user.id,
+          name: post.user.name,
+          login: post.user.login,
+          imageUrl: post.user.imageUrl
+        },
+        likes: post.likes.length,
+        isLiked: false
+      }
+    });
+    
+    renderUserPostsPage({appEl: document.getElementById("app"), userPosts});
+  })
 }

@@ -1,4 +1,4 @@
-import { getPosts, postUpload } from "./api.js";
+import { getPosts, getUserPosts } from "./api.js";
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { renderAuthPageComponent } from "./components/auth-page-component.js";
 import {
@@ -71,7 +71,8 @@ export const goToPage = (newPage, data) => {
       console.log("Открываю страницу пользователя: ", data.userId);
       page = USER_POSTS_PAGE;
       posts = [];
-      return renderApp();
+
+      getUserPosts({ id: data.userId });
     }
 
     page = newPage;
@@ -120,8 +121,7 @@ const renderApp = () => {
 
   if (page === USER_POSTS_PAGE) {
     // TODO: реализовать страницу фотографию пользвателя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return;
+    appEl.innerHTML='<img src="https://media.giphy.com/media/XunOdEWPoTCxraOxzN/giphy.gif?cid=ecf05e47zs8i1wtqxu33apf19w8p07sj0445svojn4jk7fk2&ep=v1_gifs_search&rid=giphy.gif&ct=g">';
   }
 };
 
