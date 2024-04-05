@@ -12,4 +12,4 @@ https://elenasr-boop.github.io/webdev-cw-instapro/
 
 ## Фактически затраченное время
 
-8,5 часов
+8 часов 20 минут
