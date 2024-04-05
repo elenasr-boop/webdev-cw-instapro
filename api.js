@@ -1,5 +1,7 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
+import { getToken, goToPage } from "./index.js";
+
 const personalKey = "prod";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
@@ -57,7 +59,7 @@ export function loginUser({ login, password }) {
 }
 
 // Загружает картинку в облако, возвращает url загруженной картинки
-export function uploadImage({ file }) {
+export function uploadImage({ file, description }) {
   const data = new FormData();
   data.append("file", file);
 
@@ -66,20 +68,34 @@ export function uploadImage({ file }) {
     body: data,
   }).then((response) => {
     return response.json();
+  }).then((data) =>{
+     postUpload({ description: description, imageUrl: data.fileUrl, token: getToken()})
   });
 }
 
-// export function getPosts ({ token }) {
-//   return fetch(baseHost + '/', {
-//     method: "GET", 
-//     headers: {
-//       Authorization: token,
-//     }
-//   }).then((res) => {
-//     if (res.status === 500) {
-//       alert("Ошибка сервера, попробуйте позже");
-//       throw new Error(res.statusText);
-//     }
-//     return res.json();
-//   })
-// }
+export function postUpload({ description, imageUrl, token }) {
+  return fetch( 'https://wedev-api.sky.pro/api/v1/prod/instapro/', {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify ({
+      description: description,
+      imageUrl: imageUrl
+    })
+  }).then((res) => {
+    console.log('загрузка успешна', imageUrl);
+    if (res.status === 400) {
+      if (description.replace(/\s+/g, '') ==='') {
+        alert('Описание не должно быть пустым');
+      } else {
+        alert('Не удалось загрузить картинку');
+      }  
+
+      throw new Error(res.statusText);
+    }
+    if (res.status === 201) goToPage(POSTS_PAGE);
+   }).catch((e) => {
+    console.log(e);
+   })
+}

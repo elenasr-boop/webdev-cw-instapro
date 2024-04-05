@@ -1,7 +1,7 @@
 import { uploadImage } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
 
-export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
+export function renderAddPostPageComponent({ appEl }) {
   const render = () => {
     // TODO: Реализовать страницу добавления поста
     const appHtml = `
@@ -36,12 +36,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
     document.getElementById("add-button").addEventListener("click", () => {
       let imageForm = document.querySelector('.file-upload-input');
-      let imageUrl = uploadImage( {file: imageForm.files[0]})
-      console.log("картинка загрузилась", imageUrl);
-      onAddPostClick({
-        description: document.querySelector(".input.textarea").value,
-        imageUrl: imageUrl,
-      });
+      uploadImage( {file: imageForm.files[0], description: document.querySelector(".input.textarea").value});
     });
   };
 
