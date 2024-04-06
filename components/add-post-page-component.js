@@ -1,5 +1,7 @@
-import { uploadImage } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
+import { getToken } from "../index.js";
+import { renderUploadImageComponent } from "./upload-image-component.js";
+import { postUpload } from "../api.js";
 
 export function renderAddPostPageComponent({ appEl }) {
   const render = () => {
@@ -11,7 +13,7 @@ export function renderAddPostPageComponent({ appEl }) {
       <h3 class="form-title">Добавить пост</h3>
       <div class="form-inputs">
         <div class="upload-image-container">
-          <div class="upload=image">
+          <div class="upload-image">
             <label class="file-upload-label secondary-button">
               <input type="file" class="file-upload-input" style="display: none">
               Выберите фото
@@ -34,9 +36,14 @@ export function renderAddPostPageComponent({ appEl }) {
       element: document.querySelector(".header-container"),
     });
 
+    let imageUrl = '';
+
+    renderUploadImageComponent({ element: document.querySelector(".upload-image"),onImageUrlChange(newImageUrl) {
+      imageUrl = newImageUrl;
+    } });
+
     document.getElementById("add-button").addEventListener("click", () => {
-      let imageForm = document.querySelector('.file-upload-input');
-      uploadImage( {file: imageForm.files[0], description: document.querySelector(".input.textarea").value});
+      postUpload({ description: document.querySelector(".input.textarea").value, imageUrl: imageUrl, token: getToken() })
     });
   };
 

@@ -1,5 +1,5 @@
 import { renderHeaderComponent } from "./header-component.js";
-import { like } from "../helpers.js";
+import { like, safeString } from "../helpers.js";
 import { formatDistanceToNow } from "date-fns";
 
 export function renderUserPostsPage ({ appEl, userPosts }) {
@@ -15,7 +15,7 @@ export function renderUserPostsPage ({ appEl, userPosts }) {
             <p class="post-likes-text">Нравится: <strong class="number-of-likes">${post.likes}</strong></p>
         </div>
         <p class="post-text">
-            <span class="user-name">${post.user.name}<span> ${post.description}
+            <span class="user-name">${post.user.name}<span> ${safeString(post.description)}
         </p>
         <p class="post-date">${formatDistanceToNow(post.createdAt)} ago</p>
         </li>`

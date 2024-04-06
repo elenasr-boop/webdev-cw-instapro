@@ -4,7 +4,7 @@ import { renderUserPostsPage } from "./components/user-posts-page.js";
 import { getToken, goToPage } from "./index.js";
 import { AUTH_PAGE, POSTS_PAGE } from "./routes.js";
 
-const personalKey = "prod";
+const personalKey = "elena-rybakova";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
@@ -61,7 +61,7 @@ export function loginUser({ login, password }) {
 }
 
 // Загружает картинку в облако, возвращает url загруженной картинки
-export function uploadImage({ file, description }) {
+export function uploadImage({ file }) {
   const data = new FormData();
   data.append("file", file);
 
@@ -70,40 +70,40 @@ export function uploadImage({ file, description }) {
     body: data,
   }).then((response) => {
     return response.json();
-  }).then((data) =>{
-     postUpload({ description: description, imageUrl: data.fileUrl, token: getToken()})
+  }).then((data) => {
+    return data.fileUrl;
   });
 }
 
 export function postUpload({ description, imageUrl, token }) {
-  return fetch( 'https://wedev-api.sky.pro/api/v1/prod/instapro/', {
+  return fetch('https://wedev-api.sky.pro/api/v1/elena-rybakova/instapro/', {
     method: "POST",
     headers: {
       Authorization: token,
     },
-    body: JSON.stringify ({
+    body: JSON.stringify({
       description: description,
       imageUrl: imageUrl
     })
   }).then((res) => {
     console.log('загрузка успешна', imageUrl);
     if (res.status === 400) {
-      if (description.replace(/\s+/g, '') ==='') {
+      if (description.replace(/\s+/g, '') === '') {
         alert('Описание не должно быть пустым');
       } else {
         alert('Не удалось загрузить картинку');
-      }  
+      }
 
       throw new Error(res.statusText);
     }
     if (res.status === 201) goToPage(POSTS_PAGE);
-   }).catch((e) => {
+  }).catch((e) => {
     console.log(e);
-   })
+  })
 }
 
-export function getUserPosts ({ id }) {
-  return fetch(`https://wedev-api.sky.pro/api/v1/prod/instapro/user-posts/${id}`, {
+export function getUserPosts({ id }) {
+  return fetch(`https://wedev-api.sky.pro/api/v1/elena-rybakova/instapro/user-posts/${id}`, {
     method: "GET",
     headers: {
       Authorization: getToken()
@@ -127,19 +127,19 @@ export function getUserPosts ({ id }) {
         isLiked: post.isLiked
       }
     });
-    
-    renderUserPostsPage({appEl: document.getElementById("app"), userPosts});
+
+    renderUserPostsPage({ appEl: document.getElementById("app"), userPosts });
   })
 }
 
-export function likeApi ({ id, isLiked }) {
+export function likeApi({ id, isLiked }) {
   let lik = '';
-  isLiked ? lik = 'dislike' : lik ='like';
-  return fetch('https://wedev-api.sky.pro/api/v1/prod/instapro/'+`${id}/${lik}`, {
-  method: "POST", 
-  headers: {
-    Authorization: getToken(),
-  },
+  isLiked ? lik = 'dislike' : lik = 'like';
+  return fetch('https://wedev-api.sky.pro/api/v1/elena-rybakova/instapro/' + `${id}/${lik}`, {
+    method: "POST",
+    headers: {
+      Authorization: getToken(),
+    },
   }).then((res) => {
     if (res.status === 401) {
       alert('Необходимо авторизоваться');
