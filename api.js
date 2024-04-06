@@ -61,7 +61,7 @@ export function loginUser({ login, password }) {
 }
 
 // Загружает картинку в облако, возвращает url загруженной картинки
-export function uploadImage({ file, description }) {
+export function uploadImage({ file }) {
   const data = new FormData();
   data.append("file", file);
 
@@ -71,7 +71,7 @@ export function uploadImage({ file, description }) {
   }).then((response) => {
     return response.json();
   }).then((data) => {
-    postUpload({ description: description, imageUrl: data.fileUrl, token: getToken() })
+    return data.fileUrl;
   });
 }
 
