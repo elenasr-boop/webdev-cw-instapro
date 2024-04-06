@@ -38,3 +38,10 @@ export function like ({ button }) {
             console.error(e);
           })
 }
+
+export  function safeString(str) {
+  return str.replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
