@@ -5,18 +5,12 @@ import { like, safeString } from "../helpers.js";
 import { formatDistanceToNow } from "date-fns";
 
 export function renderPostsPageComponent({ appEl }) {
-  // TODO: реализовать рендер постов из api
-  console.log("Актуальный список постов:", posts);
 
-  /**
-   * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
-   * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
-   */
   const appHtml = posts.map((post) => {
     return `<li class="post">
       <div class="post-header" data-user-id="${post.user.id}">
         <img src="${post.user.imageUrl}" class="post-header__user-image">
-        <p class="post-header__user-name">${post.user.name}</p>
+        <p class="post-header__user-name">${safeString(post.user.name)}</p>
       </div>
       <div class="post-image-container">
         <img src="${post.imageUrl}" class="post-image">
@@ -28,7 +22,7 @@ export function renderPostsPageComponent({ appEl }) {
         <p class="post-likes-text"> Нравится: <strong class="number-of-likes">${post.likes.length}</strong></p>
       </div>
       <p class="post-text">
-        <span class="user-name">${post.user.name}</span> ${safeString(post.description)}
+        <span class="user-name">${safeString(post.user.name)}</span> ${safeString(post.description)}
       </p>
       <p class="post-date">${formatDistanceToNow(post.createdAt)} ago</p>
     </li>

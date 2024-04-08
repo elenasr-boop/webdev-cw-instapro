@@ -86,7 +86,6 @@ export function postUpload({ description, imageUrl, token }) {
       imageUrl: imageUrl
     })
   }).then((res) => {
-    console.log('загрузка успешна', imageUrl);
     if (res.status === 400) {
       if (description.replace(/\s+/g, '') === '') {
         alert('Описание не должно быть пустым');
@@ -142,8 +141,6 @@ export function likeApi({ id, isLiked }) {
     },
   }).then((res) => {
     if (res.status === 401) {
-      alert('Необходимо авторизоваться');
-      goToPage(AUTH_PAGE);
       throw new Error(res.statusText);
     }
     return res.json();
