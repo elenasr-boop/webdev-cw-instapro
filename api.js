@@ -2,7 +2,7 @@
 // "боевая" версия инстапро лежит в ключе prod
 import { renderUserPostsPage } from "./components/user-posts-page.js";
 import { getToken, goToPage } from "./index.js";
-import { AUTH_PAGE, POSTS_PAGE } from "./routes.js";
+import { POSTS_PAGE } from "./routes.js";
 
 const personalKey = "elena-rybakova";
 const baseHost = "https://webdev-hw-api.vercel.app";

@@ -1,4 +1,6 @@
 import { likeApi } from "./api.js";
+import { goToPage, getToken } from "./index.js";
+import { AUTH_PAGE } from "./routes.js";
 
 export function saveUserToLocalStorage(user) {
   window.localStorage.setItem("user", JSON.stringify(user));
