@@ -15,7 +15,7 @@ export function renderUserPostsPage ({ appEl, userPosts }) {
             <p class="post-likes-text">Нравится: <strong class="number-of-likes">${post.likes}</strong></p>
         </div>
         <p class="post-text">
-            <span class="user-name">${post.user.name}<span> ${safeString(post.description)}
+            <span class="user-name">${safeString(post.user.name)}<span> ${safeString(post.description)}
         </p>
         <p class="post-date">${formatDistanceToNow(post.createdAt)} ago</p>
         </li>`
@@ -25,7 +25,7 @@ export function renderUserPostsPage ({ appEl, userPosts }) {
     <div class="header-container"></div>
     <div class="posts-user-container">
         <img src="${userPosts[0].user.imageUrl}" class="posts-user-header__user-image">
-        <p class="posts-user-header__user-name">${userPosts[0].user.name}</p>
+        <p class="posts-user-header__user-name">${safeString(userPosts[0].user.name)}</p>
     </div>
     <ul class="posts">` + userPostsHtml + '</ul></div>';
 

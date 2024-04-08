@@ -5,7 +5,6 @@ import { postUpload } from "../api.js";
 
 export function renderAddPostPageComponent({ appEl }) {
   const render = () => {
-    // TODO: Реализовать страницу добавления поста
     const appHtml = `
     <div class="page-container">
       <div class="header-container"></div>
