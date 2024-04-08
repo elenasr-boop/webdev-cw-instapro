@@ -87,15 +87,8 @@ export function postUpload({ description, imageUrl, token }) {
     })
   }).then((res) => {
     if (res.status === 400) {
-      if (description.replace(/\s+/g, '') === '') {
-        alert('Описание не должно быть пустым');
-      } else {
-        alert('Не удалось загрузить картинку');
-      }
-
       throw new Error(res.statusText);
-    }
-    if (res.status === 201) goToPage(POSTS_PAGE);
+     } else if (res.status === 201) goToPage(POSTS_PAGE);
   }).catch((e) => {
     console.log(e);
   })
