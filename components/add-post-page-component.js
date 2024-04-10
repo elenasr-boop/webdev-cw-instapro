@@ -42,7 +42,12 @@ export function renderAddPostPageComponent({ appEl }) {
     } });
 
     document.getElementById("add-button").addEventListener("click", () => {
-      postUpload({ description: document.querySelector(".input.textarea").value, imageUrl: imageUrl, token: getToken() })
+      
+      if (document.querySelector(".input.textarea").value.replace(/\s+/g, '') === '') {
+        alert('Описание не должно быть пустым');
+      } else if (document.querySelector(".file-upload-image-conrainer") !== null) {
+        postUpload({ description: document.querySelector(".input.textarea").value, imageUrl: imageUrl, token: getToken() });
+      } else alert('Загрузите картинку');
     });
   };
 
