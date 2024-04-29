@@ -1,4 +1,5 @@
 import { likeApi } from "./api.js";
+import { svgDislike, svgLike } from "./components/posts-page-component.js";
 import { goToPage, getToken } from "./index.js";
 import { AUTH_PAGE } from "./routes.js";
 
@@ -29,10 +30,10 @@ export function like({ button }) {
   if (getToken() !== undefined) {
     likeApi({ id: id, isLiked: islike }).then((data) => {
       if (data.post.isLiked) {
-        button.innerHTML = '<img src="../assets/images/like-active.svg">';
+        button.innerHTML = svgLike;
         parent.querySelector('.number-of-likes').textContent = 1 + Number(likes);
       } else {
-        button.innerHTML = '<img src="../assets/images/like-not-active.svg">';
+        button.innerHTML = svgDislike;
         parent.querySelector('.number-of-likes').textContent = Number(likes) - 1;
       }
     }).catch((e) => {
